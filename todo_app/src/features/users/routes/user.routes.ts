@@ -1,11 +1,11 @@
 import express from 'express';
 import { validateCreateUser } from '../middlewares/validateCreateUser';
 import { createUserSchema } from '../schemas/user.schema';
-import { createUser, deleteUser } from '../controllers/user.controller';
+import { createUserController, deleteUserController } from '../controllers';
 
 const userRoute = express.Router();
 
-userRoute.post('/', validateCreateUser(createUserSchema), createUser);
-userRoute.delete('/:id', deleteUser);
+userRoute.post('/', validateCreateUser(createUserSchema), createUserController);
+userRoute.delete('/:id', deleteUserController);
 
-export default userRoute;
+export { userRoute };

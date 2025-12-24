@@ -1,15 +1,19 @@
 import express from 'express';
 import bodyParser from 'body-parser';
 import { connectDB } from './db';
-import { userModule } from './features/users';
 import { globalErrorHandler } from './middlewares/globalErrorHandler';
+import { userRoute } from './features/users/routes';
+import { todosRouter } from './features/todos';
 
 const app = express();
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-app.use('/user', userModule);
+const API = process.env.API;
+
+app.use(`${API}/user`, userRoute);
+app.use(`${API}/todos`, todosRouter);
 
 // Global error handler should be registered last
 // so that it can catch errors thrown by any route or middleware

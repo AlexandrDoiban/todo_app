@@ -27,7 +27,7 @@ A full-featured task manager that can be extended with user accounts, authentica
 ### Database
 
 - **PostgreSQL**
-- Stores tasks and (optionally) users
+- Stores tasks and users
 
 ---
 

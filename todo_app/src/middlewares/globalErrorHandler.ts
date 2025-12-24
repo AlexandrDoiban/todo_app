@@ -5,7 +5,7 @@ export const globalErrorHandler: ErrorRequestHandler = (
   err: unknown,
   _req: Request,
   res: Response,
-  _next: NextFunction
+  _next: NextFunction,
 ) => {
   if (err instanceof HttpError) {
     return res.status(err.statusCode).json({

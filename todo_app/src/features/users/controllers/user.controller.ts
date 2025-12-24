@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import { CreateUserBody } from '../dto/user.dto';
 import { createUserService, deleteUserService } from '../services/user.service';
 
-export const createUser = async (
+export const createUserController = async (
   req: Request<{}, {}, CreateUserBody>,
   res: Response,
 ) => {
@@ -10,7 +10,7 @@ export const createUser = async (
   return res.status(201).json({ user });
 };
 
-export const deleteUser = async (
+export const deleteUserController = async (
   req: Request<{ id: string }>,
   res: Response,
 ) => {
