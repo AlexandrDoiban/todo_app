@@ -1,5 +1,5 @@
 import { Client } from 'pg';
-import "dotenv/config";
+import 'dotenv/config';
 
 const client = new Client({
   connectionString: process.env.PG_URL as string,
@@ -24,4 +24,3 @@ export async function connectDB(): Promise<Client> {
 }
 
 export { client };
-
