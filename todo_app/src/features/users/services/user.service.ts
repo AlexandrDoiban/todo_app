@@ -6,7 +6,6 @@ export const createUserService = async (
 ): Promise<UserResponseDto> => {
   const { email, password } = data;
 
-  // Проверка существующего пользователя
   const { rows: userExisting } = await client.query(
     'SELECT id FROM users WHERE email = $1',
     [email],
@@ -16,7 +15,6 @@ export const createUserService = async (
     throw new Error('User with this email already exists');
   }
 
-  // Вставка пользователя
   const insertQuery = `
     INSERT INTO users (email, password_hash)
     VALUES ($1, $2)
