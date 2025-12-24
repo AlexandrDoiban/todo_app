@@ -1,6 +1,11 @@
 import { Request, Response } from 'express';
 import { CreateUserBody } from '../dto/user.dto';
-import { createUserService, deleteUserService } from '../services/user.service';
+import {
+  createUserService,
+  deleteUserService,
+  getUserTodoListService,
+} from '../services/user.service';
+import { TaskListResponseDto } from '../dto';
 
 export const createUserController = async (
   req: Request<{}, {}, CreateUserBody>,
@@ -16,4 +21,12 @@ export const deleteUserController = async (
 ) => {
   const deleteUser = await deleteUserService({ userId: req.params.id });
   return res.status(204).json({ user: deleteUser });
+};
+
+export const getUserTodoListController = async (
+  req: Request<{ id: string }>,
+  res: Response<Array<TaskListResponseDto>>,
+) => {
+  const list = await getUserTodoListService(req.params.id);
+  return res.status(200).json(list);
 };

@@ -11,7 +11,10 @@ export const validateCreateTask =
 
     if (!result.success) {
       return next(
-        new BadRequestError('Validation failed', result.error.issues[0].message),
+        new BadRequestError(
+          'Validation failed',
+          result.error.issues[0].message,
+        ),
       );
     }
 

@@ -1,1 +1,1 @@
-export * from './validateCreateTask'
+export * from './validateCreateTask';

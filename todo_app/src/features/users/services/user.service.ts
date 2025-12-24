@@ -1,5 +1,6 @@
 import { client } from '../../../db';
 import { BadRequestError, ConflictError, NotFoundError } from '../../../errors';
+import { TaskListResponseDto, TaskListRowsDto } from '../dto';
 import { CreateUserBody, UserResponseDto } from '../dto/user.dto';
 
 export const createUserService = async (
@@ -46,4 +47,32 @@ export const deleteUserService = async ({ userId }: { userId: string }) => {
   );
 
   return deleted[0];
+};
+
+export const getUserTodoListService = async (
+  userId: string,
+): Promise<Array<TaskListResponseDto>> => {
+  const { rows: userRow } = await client.query(
+    'SELECT id FROM users WHERE id = $1',
+    [userId],
+  );
+
+  if (userRow.length === 0) {
+    throw new NotFoundError('User not found');
+  }
+
+  const { rows: list } = await client.query<TaskListRowsDto>(
+    `SELECT id, title, description, completed, created_at
+    FROM todos
+    WHERE user_id = $1`,
+    [userId],
+  );
+
+  return list.map((item) => ({
+    id: item.id,
+    title: item.title,
+    description: item.description,
+    completed: item.completed,
+    createdAt: item.created_at,
+  }));
 };
