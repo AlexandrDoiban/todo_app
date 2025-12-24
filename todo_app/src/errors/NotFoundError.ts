@@ -1,4 +1,6 @@
 // src/errors/NotFoundError.ts
-export class NotFoundError extends Error {
+import { HttpError } from "./HttpError";
+
+export class NotFoundError extends HttpError {
   statusCode = 204;
 }
