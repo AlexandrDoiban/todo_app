@@ -1,12 +1,11 @@
-// src/errors/GlobalError.ts
-import { ErrorRequestHandler } from 'express';
+import { Request, Response, NextFunction, ErrorRequestHandler } from 'express';
 import { HttpError } from '../errors/HttpError';
 
 export const globalErrorHandler: ErrorRequestHandler = (
-  err,
-  _req,
-  res,
-  _next,
+  err: unknown,
+  _req: Request,
+  res: Response,
+  _next: NextFunction
 ) => {
   if (err instanceof HttpError) {
     return res.status(err.statusCode).json({
@@ -15,6 +14,5 @@ export const globalErrorHandler: ErrorRequestHandler = (
     });
   }
 
-  console.error(err);
   return res.status(500).json({ error: 'Server error' });
 };
