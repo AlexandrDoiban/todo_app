@@ -2,23 +2,23 @@
 import { Request, Response, NextFunction } from 'express';
 import { ZodTypeAny, z } from 'zod';
 import { CreateUserBody } from '../dto/user.dto';
+import { BadRequestError } from '../../../errors';
 
-export const validateCreateUser = <T extends ZodTypeAny<CreateUserBody>>(
-  schema: T,
-) => {
-  return (
+export const validateCreateUser =
+  <T extends ZodTypeAny<CreateUserBody>>(schema: T) =>
+  (
     req: Request<{}, {}, CreateUserBody>,
-    res: Response,
+    _res: Response,
     next: NextFunction,
   ) => {
     const result = schema.safeParse(req.body);
+
     if (!result.success) {
-      return res.status(400).json({
-        error: 'Validation failed',
-        details: result.error.issues,
-      });
+      return next(
+        new BadRequestError('Validation failed', result.error.issues),
+      );
     }
+
     req.body = result.data;
     next();
   };
-};
