@@ -1,13 +1,21 @@
 import { Response, Request } from 'express';
 import {
+  CompleteTaskRequestBodyDto,
   CreateTaskRequestDto,
   CreateTaskResponseDto,
   DeleteTaskRequestBodyDto,
   EditTaskPatchDto,
   EditTaskRequestBodyDto,
+  GetTasksQueryDto,
 } from '../dto';
-import { createTaskService, editTaskService } from '../services';
+import {
+  completeTaskService,
+  createTaskService,
+  editTaskService,
+  getAllTasksService,
+} from '../services';
 import { deleteTaskService } from '../services';
+import { getTasksQuerySchema } from '../schemas';
 
 export const createTaskController = async (
   req: Request<{}, {}, CreateTaskRequestDto>,
@@ -38,5 +46,26 @@ export const editTaskController = async (
     task: req.body,
   });
 
+  return res.status(200).json({ task });
+};
+
+export const toggleTaskCompleteController = async (
+  req: Request<{ id: string }, {}, CompleteTaskRequestBodyDto>,
+  res: Response,
+) => {
+  const task = await completeTaskService({
+    userId: req.params.id,
+    task: req.body,
+  });
+
+  return res.status(200).json({ task });
+};
+
+export const getAllTasksController = async (
+  req: Request<{}, {}, {}, GetTasksQueryDto>,
+  res: Response,
+) => {
+  const query = getTasksQuerySchema.parse(req.query);
+  const task = await getAllTasksService(query);
   return res.status(200).json({ task });
 };

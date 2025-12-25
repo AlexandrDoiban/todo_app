@@ -1,6 +1,6 @@
 import { client } from '../../../db';
 import { BadRequestError, NotFoundError } from '../../../errors';
-import { EditTaskPatchDto } from '../dto';
+import { CreateTaskRowsDto, EditTaskPatchDto } from '../dto';
 
 export const editTaskService = async ({
   userId,
@@ -25,7 +25,7 @@ export const editTaskService = async ({
   WHERE id = $4 AND user_id = $5
   RETURNING id, title, description, completed, created_at, updated_at`;
 
-  const { rows } = await client.query(query, [
+  const { rows } = await client.query<CreateTaskRowsDto>(query, [
     title ?? null,
     description ?? null,
     completed ?? null,
@@ -37,5 +37,11 @@ export const editTaskService = async ({
     throw new NotFoundError('Task not found');
   }
 
-  return rows[0];
+  return {
+    id: rows[0].id,
+    title: rows[0].title,
+    description: rows[0].description,
+    completed: rows[0].completed,
+    createdAt: rows[0].created_at,
+  };
 };

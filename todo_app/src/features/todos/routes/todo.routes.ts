@@ -3,11 +3,15 @@ import {
   createTaskController,
   deleteTaskController,
   editTaskController,
+  getAllTasksController,
+  toggleTaskCompleteController,
 } from '../controllers';
 import { validateCreateTask, validateEditTask } from '../middlewares';
 import { createTaskSchema, editTaskSchema } from '../schemas';
 
 const todosRouter = Router();
+
+todosRouter.get('/list', getAllTasksController);
 
 todosRouter.post(
   '/create',
@@ -23,4 +27,5 @@ todosRouter.patch(
   editTaskController,
 );
 
+todosRouter.patch('/:id/complete', toggleTaskCompleteController);
 export { todosRouter };
