@@ -1,1 +1,2 @@
-export * from './create-task.schema';
+export * from './createTask.schema';
+export * from './editTask.schema';

@@ -3,8 +3,10 @@ import {
   CreateTaskRequestDto,
   CreateTaskResponseDto,
   DeleteTaskRequestBodyDto,
+  EditTaskPatchDto,
+  EditTaskRequestBodyDto,
 } from '../dto';
-import { createTaskService } from '../services';
+import { createTaskService, editTaskService } from '../services';
 import { deleteTaskService } from '../services';
 
 export const createTaskController = async (
@@ -25,4 +27,16 @@ export const deleteTaskController = async (
   });
 
   return res.sendStatus(204);
+};
+
+export const editTaskController = async (
+  req: Request<{ id: string }, {}, EditTaskPatchDto>,
+  res: Response,
+) => {
+  const task = await editTaskService({
+    userId: req.params.id,
+    task: req.body,
+  });
+
+  return res.status(200).json({ task });
 };

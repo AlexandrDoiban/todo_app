@@ -1,7 +1,11 @@
 import { Router } from 'express';
-import { createTaskController, deleteTaskController } from '../controllers';
-import { validateCreateTask } from '../middlewares';
-import { createTaskSchema } from '../schemas';
+import {
+  createTaskController,
+  deleteTaskController,
+  editTaskController,
+} from '../controllers';
+import { validateCreateTask, validateEditTask } from '../middlewares';
+import { createTaskSchema, editTaskSchema } from '../schemas';
 
 const todosRouter = Router();
 
@@ -12,5 +16,11 @@ todosRouter.post(
 );
 
 todosRouter.delete('/delete/:id', deleteTaskController);
+
+todosRouter.patch(
+  '/edit/:id',
+  validateEditTask(editTaskSchema),
+  editTaskController,
+);
 
 export { todosRouter };
