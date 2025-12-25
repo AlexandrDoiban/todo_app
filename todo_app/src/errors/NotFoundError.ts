@@ -2,5 +2,5 @@
 import { HttpError } from './HttpError';
 
 export class NotFoundError extends HttpError {
-  statusCode = 204;
+  statusCode = 404;
 }

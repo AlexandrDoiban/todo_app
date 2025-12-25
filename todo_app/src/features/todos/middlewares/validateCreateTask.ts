@@ -2,11 +2,15 @@
 import { Request, Response, NextFunction } from 'express';
 import { ZodTypeAny, z } from 'zod';
 import { BadRequestError } from '../../../errors';
-import { CreateTaskDto } from '../dto';
+import { CreateTaskRequestDto } from '../dto';
 
 export const validateCreateTask =
-  <T extends ZodTypeAny<CreateTaskDto>>(schema: T) =>
-  (req: Request<{}, {}, CreateTaskDto>, _res: Response, next: NextFunction) => {
+  <T extends ZodTypeAny<CreateTaskRequestDto>>(schema: T) =>
+  (
+    req: Request<{}, {}, CreateTaskRequestDto>,
+    _res: Response,
+    next: NextFunction,
+  ) => {
     const result = schema.safeParse(req.body);
 
     if (!result.success) {

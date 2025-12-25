@@ -1,9 +1,22 @@
 import { client } from '../../../db';
-import { ConflictError, NotFoundError } from '../../../errors';
-import { CreateTaskDto } from '../dto';
+import { BadRequestError, ConflictError, NotFoundError } from '../../../errors';
+import { validateUuid } from '../../../helpers';
+import {
+  CreateTaskRequestDto,
+  CreateTaskResponseDto,
+  CreateTaskRowsDto,
+} from '../dto';
 
-export const createTaskService = async (data: CreateTaskDto) => {
+export const createTaskService = async (
+  data: CreateTaskRequestDto,
+): Promise<CreateTaskResponseDto> => {
   const { userId, title, description } = data;
+
+  const isValidUserId = validateUuid(userId);
+
+  if (!isValidUserId) {
+    throw new BadRequestError('Invalid userId');
+  }
 
   const { rows: userExists } = await client.query(
     'SELECT id FROM users WHERE id = $1',
@@ -28,10 +41,16 @@ export const createTaskService = async (data: CreateTaskDto) => {
     VALUES ($1, $2, $3)
     RETURNING id, title, description
     `;
-  const { rows: task } = await client.query(insertQuery, [
+  const {
+    rows: [task],
+  } = await client.query<CreateTaskRowsDto>(insertQuery, [
     userId,
     title,
     description,
   ]);
-  return task[0];
+
+  return {
+    ...task,
+    createdAt: task.created_at,
+  };
 };

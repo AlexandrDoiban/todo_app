@@ -1,5 +1,6 @@
 import { client } from '../../../db';
 import { BadRequestError, ConflictError, NotFoundError } from '../../../errors';
+import { validateUuid } from '../../../helpers';
 import { TaskListResponseDto, TaskListRowsDto } from '../dto';
 import { CreateUserBody, UserResponseDto } from '../dto/user.dto';
 
@@ -32,6 +33,12 @@ export const createUserService = async (
 };
 
 export const deleteUserService = async ({ userId }: { userId: string }) => {
+  const isValidUserId = validateUuid(userId);
+
+  if (!isValidUserId) {
+    throw new BadRequestError('Invalid userId');
+  }
+
   const { rows: userExists } = await client.query(
     'SELECT id FROM users WHERE id = $1',
     [userId],
@@ -52,6 +59,12 @@ export const deleteUserService = async ({ userId }: { userId: string }) => {
 export const getUserTodoListService = async (
   userId: string,
 ): Promise<Array<TaskListResponseDto>> => {
+  const isValidUserId = validateUuid(userId);
+
+  if (!isValidUserId) {
+    throw new BadRequestError('Invalid userId');
+  }
+
   const { rows: userRow } = await client.query(
     'SELECT id FROM users WHERE id = $1',
     [userId],

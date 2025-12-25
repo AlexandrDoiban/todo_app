@@ -9,8 +9,12 @@ import {
 
 const userRoute = express.Router();
 
-userRoute.post('/', validateCreateUser(createUserSchema), createUserController);
-userRoute.delete('/:id', deleteUserController);
+userRoute.post(
+  '/create',
+  validateCreateUser(createUserSchema),
+  createUserController,
+);
+userRoute.delete('/delete/:id', deleteUserController);
 userRoute.get('/list/:id', getUserTodoListController);
 
 export { userRoute };

@@ -1,1 +1,2 @@
-export * from './create-task.service';
+export * from './createTask.service';
+export * from './deleteTask.service';
